@@ -1,0 +1,14 @@
+package in.gore;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+
+public class WaitNotifyTest {
+
+	public static void main(String args[]) {
+		
+		BlockingQueue queue = new BlockingQueue(3);
+	}
+}

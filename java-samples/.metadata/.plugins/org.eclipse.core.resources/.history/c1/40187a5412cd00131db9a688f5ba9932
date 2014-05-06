@@ -1,0 +1,16 @@
+package in.gore;
+
+
+
+/**
+*
+* @author mgore
+* Uses a size element to track the number of elements in the queue.
+* removePos points to the head of the queue to remove elements from.
+* The isFull and isEmpty rely on the size to return appropriate status.
+* When
+*/
+
+public class Queue {
+
+}

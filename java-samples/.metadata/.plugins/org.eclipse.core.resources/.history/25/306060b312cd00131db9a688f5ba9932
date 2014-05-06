@@ -1,0 +1,8 @@
+package in.gore;
+
+
+
+public class WaitNotifyTest {
+
+	static List<String> data = new ArrayList<String>();
+}

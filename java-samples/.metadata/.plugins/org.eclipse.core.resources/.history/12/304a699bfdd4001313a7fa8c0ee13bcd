@@ -1,0 +1,28 @@
+package in.gore;
+
+public class RWLock {
+	
+	Object  wrtLock = new Object();
+	int readCt;
+	int wrtCt;
+	
+	public RWLock() {
+		
+	}
+	
+	public void readLock() throws InterruptedException {
+		synchronized(wrtLock) {
+			if (wrtCt > 0)
+				wrtLock.wait();
+			else
+				readCt++;
+		}
+	}
+	
+	public void readUnlock() {
+		synchronized(wrtLock) {
+			
+		}
+	}
+
+}

@@ -1,0 +1,19 @@
+package in.gore;
+
+public class RWLock {
+	
+	Object  wrtLock = new Object();
+	int readCt;
+	int wrtCt;
+	
+	public RWLock() {
+		
+	}
+	
+	public readLock() {
+		synchronized(wrtLock) {
+			
+		}
+	}
+
+}

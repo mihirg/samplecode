@@ -1,0 +1,79 @@
+package in.gore;
+
+import java.util.LinkedList;
+import java.util.Queue;
+
+/**
+ * This class uses the wait/notify mechanism for signaling between empty and filled state changes.
+ * There are two ways of using the wait/notify mechanism
+ * a. Use the object it self for synchronization. In this case, the call to notify() will 
+ * @author mgore
+ *
+ * @param <T>
+ */
+public class BlockingQueue<T> {
+
+	private Queue<T> queue = new LinkedList<T>();
+	private int capacity;
+	Object lock = new Object();
+	Object newLock = new Object();
+	
+	public BlockingQueue(int capacity) {
+		this.capacity = capacity;
+	}
+	
+	public void put (T element) {
+		synchronized (lock) {
+			while (queue.size() == capacity) {
+				System.out.println(Thread.currentThread().getName() + " :Queue Reached Capacity. Waiting for capacity.");
+				try {
+					lock.wait();
+					System.out.println(Thread.currentThread().getName() + " :Exiting wait. Checking for queue size.");
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}				
+			}
+			
+			System.out.println(Thread.currentThread().getName() + " :Adding object to queue");
+			queue.add(element);
+			lock.notify();			
+		}		
+	}
+	
+	public T get() {
+		synchronized(lock) {
+			while (queue.isEmpty()) {
+				System.out.println(Thread.currentThread().getName() + " :Queue is empty. Waiting ....");
+				try {
+					lock.wait();
+					System.out.println(Thread.currentThread().getName() + " :Exiting wait. Checking for queue size.");
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			System.out.println(Thread.currentThread().getName() + " :Data available in queue.");
+			T element = queue.remove();
+			lock.notify();
+			System.out.println(Thread.currentThread().getName() + " :Notifying that element has been removed.");
+			return element;
+		}
+	}
+	
+	public void newTest() {
+		synchronized(newLock) {
+			try {
+				System.out.println(Thread.currentThread().getName() + " :Waiting on newLock ....");
+				newLock.wait();
+				System.out.println(Thread.currentThread().getName() + " :Waiting on newLock Finished!");
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
+}

@@ -1,0 +1,57 @@
+package in.gore;
+
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class BlockingQueue<T> {
+
+	private Queue<T> queue = new LinkedList<T>();
+	private int capacity;
+	Object lock = new Object();
+	Object newLock = new Object();
+	
+	public BlockingQueue(int capacity) {
+		this.capacity = capacity;
+	}
+	
+	public void put (T element) {
+		synchronized (lock) {
+			while (queue.size() == capacity) {
+				System.out.println(Thread.currentThread().getName() + " :Queue Reached Capacity. Waiting for capacity.");
+				try {
+					lock.wait();
+					System.out.println(Thread.currentThread().getName() + " :Exiting wait. Checking for queue size.");
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}				
+			}
+			
+			System.out.println(Thread.currentThread().getName() + " :Adding object to queue");
+			queue.add(element);
+			lock.notify();			
+		}		
+	}
+	
+	public T get() {
+		synchronized(lock) {
+			while (queue.isEmpty()) {
+				System.out.println(Thread.currentThread().getName() + " :Queue is empty. Waiting ....");
+				try {
+					lock.wait();
+					System.out.println(Thread.currentThread().getName() + " :Exiting wait. Checking for queue size.");
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			System.out.println(Thread.currentThread().getName() + " :Data available in queue.");
+			T element = queue.remove();
+			lock.notify();
+			return element;
+		}
+	}
+	
+	
+}

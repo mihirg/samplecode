@@ -1,0 +1,22 @@
+package in.gore;
+
+public class RWLock {
+	
+	Object  wrtLock = new Object();
+	int readCt;
+	int wrtCt;
+	
+	public RWLock() {
+		
+	}
+	
+	public void readLock() {
+		synchronized(wrtLock) {
+			if (wrtCt > 0)
+				wrtLock.wait();
+			else
+				readCt++;
+		}
+	}
+
+}

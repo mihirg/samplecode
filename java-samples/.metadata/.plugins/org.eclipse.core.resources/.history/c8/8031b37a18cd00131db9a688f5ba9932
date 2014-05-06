@@ -1,0 +1,36 @@
+package in.gore;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+
+public class WaitNotifyTest {
+
+	public static void main(String args[]) {
+		
+		final BlockingQueue<String> queue = new BlockingQueue<String>(3);
+		
+		Thread t = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				System.out.println(queue.get());				
+			}
+			
+		});
+		t.setName("Thread 1");
+		t.start();
+
+		Thread t2 = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				queue.put("Test");
+			}
+			
+		});
+		t.setName("Thread 1");
+
+	}
+}

@@ -1,0 +1,49 @@
+package in.gore;
+
+public class RWLock {
+	
+	Object  wrtLock = new Object();
+	int readCt;
+	int wrtCt;
+	
+	public RWLock() {
+		
+	}
+	
+	public void readLock() throws InterruptedException {
+		synchronized(wrtLock) {
+			// if number of writers is more than 0, then wait.
+			while (wrtCt > 0)
+				wrtLock.wait();
+			
+			// number of writers is 0, so increment the read counter.
+			readCt++;
+		}
+	}
+	
+	public void readUnlock() {
+		synchronized(wrtLock) {
+			readCt--;
+			if (readCt == 0)
+				wrtLock.notifyAll();
+		}
+	}
+	
+	public void writeLock() throws InterruptedException {
+		synchronized (wrtLock) {
+			while (readCt > 0)
+				wrtLock.wait();
+			while (wrtCt > 0)
+				wrtLock.wait();
+			wrtCt++;
+		}
+	}
+	
+	public void writeUnlock() {
+		synchronized(wrtLock) {
+			wrtCt--;
+			wrtLock.notifyAll();
+		}
+	}
+
+}
